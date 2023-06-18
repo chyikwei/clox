@@ -1,7 +1,7 @@
 #include "vm.h"
 
 typedef struct {
-	const char* output;
+	char* output;
 	InterpretResult result;
 } ScriptResult;
 

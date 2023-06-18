@@ -20,6 +20,7 @@ void testAddition(void)
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_STRING(ret.output, output);
+	free(ret.output);
 }
 
 void testSubtraction(void)
@@ -29,6 +30,7 @@ void testSubtraction(void)
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_STRING(ret.output, output);
+	free(ret.output);
 }
 
 void testMultiplication(void)
@@ -38,6 +40,7 @@ void testMultiplication(void)
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_STRING(ret.output, output);
+	free(ret.output);
 }
 
 void testDivision(void)
@@ -47,6 +50,7 @@ void testDivision(void)
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_STRING(ret.output, output);
+	free(ret.output);
 }
 
 int main(void)
