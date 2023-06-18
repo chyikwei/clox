@@ -20,7 +20,8 @@ TARGET_EXEC := $(PATHB)clox
 
 # source files
 SRC := $(wildcard $(PATHS)*.c)
-SRC_T := $(wildcard $(PATHT)*.c)
+SRC_T := $(wildcard $(PATHT)Test*.c)
+SRC_T_LIB := $(filter-out $(SRC_T), $(wildcard $(PATHT)*.c))
 
 COMPILE := gcc -c
 LINK := gcc
@@ -28,8 +29,12 @@ DEPEND := gcc -MM -MG -MF
 CFLAGS_T := -I. -I$(PATHU) -I$(PATHS) -DTEST
 CFLAGS := -I. -I$(PATHS)
 
+# create src objs in build/objs/
 OBJS := $(patsubst $(PATHS)%.c,$(PATHO)%.o,$(SRC))
+# create source objs in build/test_objs/
 OBJS_T := $(patsubst $(PATHS)%.c,$(PATH_TO)%.o,$(SRC))
+# create test lib objs in build/test_objs/
+OBJS_T_LIB := $(patsubst $(PATHT)%.c,$(PATH_TO)%.o,$(SRC_T_LIB))
 
 RESULTS := $(patsubst $(PATHT)Test%.c,$(PATH_TR)Test%.txt,$(SRC_T))
 
@@ -64,8 +69,8 @@ test: $(BUILD_PATHS_T) $(RESULTS)
 $(PATH_TR)%.txt: $(PATH_TE)%.$(TARGET_EXTENSION)
 	-./$< > $@ 2>&1
 
-# build/test_objs/Test*.o build/test_objs/{all_src}.o, build/_testobjs/unity.o   
-$(PATH_TE)Test%.$(TARGET_EXTENSION): $(PATH_TO)Test%.o $(OBJS_T) $(PATH_TO)unity.o
+# build/test_objs/Test*.o build/test_objs/{all_src}.o, build/test_objs/{test_lib}.o build/test_objs/unity.o
+$(PATH_TE)Test%.$(TARGET_EXTENSION): $(PATH_TO)Test%.o $(OBJS_T) $(OBJS_T_LIB) $(PATH_TO)unity.o
 	$(LINK) -o $@ $^
 
 # test/*.c

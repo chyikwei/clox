@@ -1,6 +1,7 @@
 #ifndef clox_value_h
 #define clox_value_h
 
+#include <stdio.h>
 #include "common.h"
 
 typedef double Value;
@@ -14,7 +15,7 @@ typedef struct {
 void initValueArray(ValueArray* array);
 void writeValueArray(ValueArray* array, Value value);
 void freeValueArray(ValueArray* array);
-void printValue(Value value);
+void printValue(Value value, FILE* outstream);
 
 #endif
 

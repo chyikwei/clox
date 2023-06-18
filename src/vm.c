@@ -28,7 +28,7 @@ Value pop() {
 	return *vm.stackTop;
 }
 
-static InterpretResult run() {
+static InterpretResult run(FILE* outstream) {
 #define	READ_BYTE() (*vm.ip++)
 #define READ_CONSTANT() (vm.chunk->constants.values[READ_BYTE()]);
 #define BINARY_OP(op) \
@@ -44,7 +44,7 @@ static InterpretResult run() {
 		printf("     ");
 		for (Value* slot = vm.stack; slot < vm.stackTop; slot++) {
 			printf("[ ");
-			printValue(*slot);
+			printValue(*slot, stdout);
 			printf(" ]");
 		}
 		printf("\n");
@@ -65,8 +65,8 @@ static InterpretResult run() {
 			case OP_DIVIDE: BINARY_OP(/); break;
 			case OP_NEGATE: push(-pop()); break;							
 			case OP_RETURN: {
-				printValue(pop());
-				printf("\n");
+				printValue(pop(), outstream);
+				fprintf(outstream, "\n");
 				return INTERPRET_OK;
 			}
 		}
@@ -77,7 +77,7 @@ static InterpretResult run() {
 #undef BINARY_OP
 }
 
-InterpretResult interpret(const char* source) {
+InterpretResult interpret(const char* source, FILE* outstream) {
 	Chunk chunk;
 	initChunk(&chunk);	
 				
@@ -89,7 +89,7 @@ InterpretResult interpret(const char* source) {
 	vm.chunk = &chunk;
 	vm.ip = vm.chunk->code;
 	
-	InterpretResult result = run();
+	InterpretResult result = run(outstream);
 	
 	freeChunk(&chunk);
 	return result;
