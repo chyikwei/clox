@@ -41,8 +41,21 @@ void testNilValue(void)
 
 void testNumberValue(void)
 {
-	const char* number_val = "10";
-	const char* output = "10\n";
+	const char* number_val = "-10";
+	const char* output = "-10\n";
+	ScriptResult ret = scriptRun(number_val);
+	TEST_ASSERT(ret.result == INTERPRET_OK);
+	TEST_ASSERT_EQUAL_STRING(ret.output, output);
+
+	if (ret.output != NULL) {
+		free(ret.output);
+	}
+}
+
+void testNotNil(void)
+{
+	const char* number_val = "!nil";
+	const char* output = "true\n";
 	ScriptResult ret = scriptRun(number_val);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_STRING(ret.output, output);
@@ -59,6 +72,7 @@ UNITY_BEGIN();
 RUN_TEST(testBooleanValue);
 RUN_TEST(testNilValue);
 RUN_TEST(testNumberValue);
+RUN_TEST(testNotNil);
 
 return UNITY_END();
 }
