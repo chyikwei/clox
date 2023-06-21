@@ -30,12 +30,20 @@ void testCompileFailure(void)
 	TEST_ASSERT(ret.result == INTERPRET_COMPILE_ERROR);
 }
 
+void testRunTimeError(void)
+{
+	const char* input = "3 + true";
+	ScriptResult ret = scriptRun(input);
+	TEST_ASSERT(ret.result == INTERPRET_RUNTIME_ERROR);
+}
+
 int main(void)
 {
 UNITY_BEGIN();
 
 RUN_TEST(testCompileSuccess);
 RUN_TEST(testCompileFailure);
+RUN_TEST(testRunTimeError);
 
 return UNITY_END();
 }
