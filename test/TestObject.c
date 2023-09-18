@@ -16,7 +16,7 @@ void tearDown(void) {
 
 void testObjectCount(void)
 {
-	const char* input = "\"aa\" + \"bb\" + \"cc\"";
+	const char* input = "print \"aa\" + \"bb\" + \"cc\";";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_INT(objectCount(), 5);

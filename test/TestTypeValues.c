@@ -15,7 +15,7 @@ void tearDown(void) {
 
 void testBooleanValue(void)
 {
-	const char* bool_val = "true";
+	const char* bool_val = "print true;";
 	const char* output = "true\n";
 	ScriptResult ret = scriptRun(bool_val);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
@@ -28,7 +28,7 @@ void testBooleanValue(void)
 
 void testNilValue(void)
 {
-	const char* nil_val = "nil";
+	const char* nil_val = "print nil;";
 	const char* output = "nil\n";
 	ScriptResult ret = scriptRun(nil_val);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
@@ -41,7 +41,7 @@ void testNilValue(void)
 
 void testNumberValue(void)
 {
-	const char* number_val = "-10";
+	const char* number_val = "print -10;";
 	const char* output = "-10\n";
 	ScriptResult ret = scriptRun(number_val);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
@@ -54,7 +54,7 @@ void testNumberValue(void)
 
 void testNotNil(void)
 {
-	const char* number_val = "!nil";
+	const char* number_val = "print !nil;";
 	const char* output = "true\n";
 	ScriptResult ret = scriptRun(number_val);
 	TEST_ASSERT(ret.result == INTERPRET_OK);

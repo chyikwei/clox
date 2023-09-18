@@ -15,7 +15,7 @@ void tearDown(void) {
 
 void testStringConcatenate(void)
 {
-	const char* input = "\"a\" + \"b\" + \"cd\"";
+	const char* input = "print \"a\" + \"b\" + \"cd\";";
 	const char* output = "abcd\n";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
@@ -25,7 +25,7 @@ void testStringConcatenate(void)
 
 void testInvalidStringConcatenate(void)
 {
-	const char* input = "3 + \"abc\"";
+	const char* input = "print 3 + \"abc\";";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_RUNTIME_ERROR);
 }

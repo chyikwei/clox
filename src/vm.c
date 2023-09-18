@@ -145,11 +145,16 @@ static InterpretResult run(FILE* outstream) {
 				push(NUMBER_VAL(-AS_NUMBER(pop())));
 				break;
 
-			case OP_RETURN: {
+			case OP_PRINT: {
 				printValue(pop(), outstream);
 				fprintf(outstream, "\n");
+				break;	
+			}
+
+			case OP_RETURN: {
 				return INTERPRET_OK;
 			}
+
 		}
 	}
 	

@@ -15,7 +15,7 @@ void tearDown(void) {
 
 void testCompileSuccess(void)
 {
-	const char* input = "3 + 3 + 3";
+	const char* input = "print 3 + 3 + 3;";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	if (ret.output != NULL) {
@@ -25,14 +25,14 @@ void testCompileSuccess(void)
 
 void testCompileFailure(void)
 {
-	const char* input = "3 + ";
+	const char* input = "print 3 + ;";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_COMPILE_ERROR);
 }
 
 void testRunTimeError(void)
 {
-	const char* input = "3 + true";
+	const char* input = "print 3 + true;";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_RUNTIME_ERROR);
 }

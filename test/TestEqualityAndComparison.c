@@ -14,10 +14,10 @@ void tearDown(void) {
 }
 
 void testEquality(void)
-{
-	const char* input = "3 == 3";
+{	
+	const char* input = "print 3 == 3;";
 	const char* output = "true\n";
-	ScriptResult ret = scriptRun(output);
+	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_STRING(ret.output, output);
 
@@ -28,9 +28,9 @@ void testEquality(void)
 
 void testNilEQuality(void)
 {
-	const char* input = "nil == nil";
+	const char* input = "print nil == nil;";
 	const char* output = "true\n";
-	ScriptResult ret = scriptRun(output);
+	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_STRING(ret.output, output);
 
@@ -41,9 +41,9 @@ void testNilEQuality(void)
 
 void testNotQuality(void)
 {
-	const char* input = "3 != 3";
+	const char* input = "print 3 != 3;";
 	const char* output = "false\n";
-	ScriptResult ret = scriptRun(output);
+	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_STRING(ret.output, output);
 
@@ -54,7 +54,7 @@ void testNotQuality(void)
 
 void testGreater(void)
 {
-	const char* input = "3 > 4";
+	const char* input = "print 3 > 4;";
 	const char* output = "false\n";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
@@ -67,7 +67,7 @@ void testGreater(void)
 
 void testLess(void)
 {
-	const char* input = "3 < 4";
+	const char* input = "print 3 < 4;";
 	const char* output = "true\n";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);

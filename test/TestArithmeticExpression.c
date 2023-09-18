@@ -15,7 +15,7 @@ void tearDown(void) {
 
 void testAddition(void)
 {
-	const char* input = "3 + 3 + 3";
+	const char* input = "print 3 + 3 + 3;";
 	const char* output = "9\n";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
@@ -25,7 +25,7 @@ void testAddition(void)
 
 void testSubtraction(void)
 {
-	const char* input = "3 - 2";
+	const char* input = "print 3 - 2;";
 	const char* output = "1\n";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
@@ -35,7 +35,7 @@ void testSubtraction(void)
 
 void testMultiplication(void)
 {
-	const char* input = "3 * 4";
+	const char* input = "print 3 * 4;";
 	const char* output = "12\n";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
@@ -45,7 +45,7 @@ void testMultiplication(void)
 
 void testDivision(void)
 {
-	const char* input = "6 / 2";
+	const char* input = "print 6 / 2;";
 	const char* output = "3\n";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
