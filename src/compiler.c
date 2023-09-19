@@ -197,6 +197,19 @@ static void string() {
 																	parser.previous.length - 2)));
 }
 
+static uint8_t identifierConstant(Token* name) {
+	return makeConstant(OBJ_VAL(copyString(name->start, name->length)));
+}
+
+static void namedVariable(Token name) {
+	uint8_t arg = identifierConstant(&name);
+	emitBytes(OP_GET_GLOBAL, arg);
+}
+
+static void variable() {
+	namedVariable(parser.previous);
+}
+
 static void unary() {
 	TokenType operatorType = parser.previous.type;
 	
@@ -231,7 +244,7 @@ ParseRule rules[] = {
 	[TOKEN_GREATER_EQUAL] = {NULL, binary, PREC_COMPARISON},
 	[TOKEN_LESS]          = {NULL, binary, PREC_COMPARISON},
 	[TOKEN_LESS_EQUAL]    = {NULL, binary, PREC_COMPARISON},
-	[TOKEN_IDENTIFIER]    = {NULL, NULL, PREC_NONE},
+	[TOKEN_IDENTIFIER]    = {variable, NULL, PREC_NONE},
 	[TOKEN_STRING]        = {string, NULL, PREC_NONE},
 	[TOKEN_NUMBER]        = {number, NULL, PREC_NONE},
 	[TOKEN_AND]           = {NULL, NULL, PREC_NONE},
@@ -271,6 +284,15 @@ static void parsePrecedence(Precedence precedence) {
 	}
 }
 
+static void defineVariable(uint8_t global) {
+	emitBytes(OP_DEFINE_GLOBAL, global);
+}
+
+static uint8_t parseVariable(const char* errorMessage) {
+	consume(TOKEN_IDENTIFIER, errorMessage);
+	return identifierConstant(&parser.previous);
+}
+
 static ParseRule* getRule(TokenType type) {
 	return &rules[type];
 }
@@ -279,8 +301,61 @@ static void expression() {
 	parsePrecedence(PREC_ASSIGNMENT);
 }
 
+static void varDeclaration() {
+	uint8_t global = parseVariable("Expect variable name.");
+
+	if (match(TOKEN_EQUAL)) {
+		expression();
+	} else {
+		emitByte(OP_NIL);
+	}
+	consume(TOKEN_SEMICOLON,
+					"Expect ';' after variable declaration.");
+
+	defineVariable(global);
+}
+
+
+static void expressionStatement() {
+	expression();
+	consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
+	emitByte(OP_POP);
+}
+
+static void synchronize() {
+	parser.panicMode = false;
+
+	while (parser.current.type != TOKEN_EOF) {
+		if (parser.previous.type == TOKEN_SEMICOLON) return;
+
+		switch (parser.current.type) {
+			case TOKEN_CLASS:
+			case TOKEN_FUN:
+			case TOKEN_VAR:
+			case TOKEN_FOR:
+			case TOKEN_IF:
+			case TOKEN_WHILE:
+			case TOKEN_PRINT:
+			case TOKEN_RETURN:
+				return;
+
+			default:
+				// Do nothing.
+				;
+		}
+
+		advance();
+	}
+}
+
 static void declaration() {
-	statement();
+	if (match(TOKEN_VAR)) {
+		varDeclaration();
+	} else {
+		statement();
+	}
+
+	if (parser.panicMode) synchronize();
 }
 
 static void printStatement() {
@@ -293,10 +368,7 @@ static void statement() {
 	if (match(TOKEN_PRINT)) {
 		printStatement();
 	} else {
-		// TODO: add to prevent incomplete syntax caused infinite loop
-		// remove once we have full statement.
-		error("non print statement");
-		advance();
+		expressionStatement();
 	}
 }
 
