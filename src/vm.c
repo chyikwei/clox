@@ -131,6 +131,17 @@ static InterpretResult run(FILE* outstream) {
 				pop();
 				break;
 			}
+	
+			case OP_SET_GLOBAL: {
+				ObjString* name = READ_STRING();
+				if(tableSet(&vm.globals, name, peek(0))) {
+					// new key
+					tableDelete(&vm.globals, name);
+					runTimeError("Undefined variable '%s'.", name->chars);
+					return INTERPRET_RUNTIME_ERROR;
+				}
+				break;
+			}
 
 			case OP_EQUAL: {
 				Value b = pop();
