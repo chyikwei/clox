@@ -19,7 +19,8 @@ void testObjectCount(void)
 	const char* input = "print \"aa\" + \"bb\" + \"cc\";";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
-	TEST_ASSERT_EQUAL_INT(objectCount(), 5);
+	// total should be 6 objects: <script>, "aa", "bb", "cc", "aabb", "aabbcc"
+	TEST_ASSERT_EQUAL_INT(objectCount(), 6);
 	free(ret.output);
 }
 
