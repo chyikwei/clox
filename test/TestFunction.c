@@ -63,6 +63,33 @@ void testFnReturn(void)
 	free(ret.output);
 }
 
+void testNativeFn(void)
+{
+	const char* input = 
+		"var a = clock();"
+		"print a < 100;"
+		"var b = clock();"
+		"print b >= a;";
+	const char* output = "true\ntrue\n";
+	ScriptResult ret = scriptRun(input);
+	TEST_ASSERT(ret.result == INTERPRET_OK);
+	TEST_ASSERT_EQUAL_STRING(output, ret.output);
+}
+
+void testRecursiveFn(void)
+{
+	const char* input = 
+		"fun fib(n) {"
+		"  if (n < 2) return n;"
+		"  return fib(n-2) + fib(n-1);"
+		"}"
+		"print fib(10);";
+	const char* output = "55\n";
+	ScriptResult ret = scriptRun(input);
+	TEST_ASSERT(ret.result == INTERPRET_OK);
+	TEST_ASSERT_EQUAL_STRING(output, ret.output);
+}
+
 int main(void)
 {
 UNITY_BEGIN();
@@ -71,6 +98,8 @@ RUN_TEST(testFnDeclaration);
 RUN_TEST(testFnCall);
 RUN_TEST(testFnNilReturn);
 RUN_TEST(testFnReturn);
+RUN_TEST(testNativeFn);
+RUN_TEST(testRecursiveFn);
 
 return UNITY_END();
 }
