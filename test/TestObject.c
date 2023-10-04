@@ -20,8 +20,8 @@ void testObjectCount(void)
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	// total should be 8 objects: "aa", "bb", "cc", "aabb", "aabbcc"
-	// native: "clock", clock fn(), "<script>" 
-	TEST_ASSERT_EQUAL_INT(8, objectCount());
+	// native: "clock", clock fn(), "<script>", <script> closure
+	TEST_ASSERT_EQUAL_INT(9, objectCount());
 	free(ret.output);
 }
 
