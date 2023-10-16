@@ -7,7 +7,7 @@
 #include "value.h"
 
 #define FRAME_MAX 64
-#define STACK_MAX (FRAME_MAX * UNIT8_COUNT)
+#define STACK_MAX (FRAME_MAX * UINT8_COUNT)
 
 typedef struct {
 	ObjClosure* closure;
@@ -23,6 +23,7 @@ typedef struct {
 	Value* stackTop;
 	Table globals;
 	Table strings;
+	ObjUpvalue* openUpvalues;
 
 	Obj* objects;
 } VM;
