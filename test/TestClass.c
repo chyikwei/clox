@@ -118,6 +118,22 @@ void testThisInFunction(void)
 	TEST_ASSERT_EQUAL_STRING(output, ret.output);
 }
 
+void testMethodCallOptimization(void) {
+	const char* input =
+		"class A {\
+		 	init() {\
+			 	fun f() {print \"not a method\";}\
+			 	this.field = f;\
+			}\
+		}\
+		var a = A();\
+		a.field();";
+
+	const char* output = "not a method\n";
+	ScriptResult ret = scriptRun(input);
+	TEST_ASSERT(ret.result == INTERPRET_OK);
+	TEST_ASSERT_EQUAL_STRING(output, ret.output);
+}
 
 int main(void)
 {
@@ -130,6 +146,7 @@ RUN_TEST(testMethod);
 RUN_TEST(testThis);
 RUN_TEST(testThisInFunction);
 RUN_TEST(testInitializer);
+RUN_TEST(testMethodCallOptimization);
 
 return UNITY_END();
 }
