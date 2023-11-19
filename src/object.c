@@ -155,6 +155,7 @@ void printObject(Value value, FILE* outstream) {
 			break;
 		case OBJ_BOUND_METHOD:
 			printFunction(AS_BOUND_METHOD(value)->method->function, outstream);
+			break;
 		case OBJ_CLOSURE:
 			printFunction(AS_CLOSURE(value)->function, outstream);
 			break;

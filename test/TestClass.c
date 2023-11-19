@@ -55,9 +55,10 @@ void testMethod(void)
 {
 	const char* input =
 		"class Brunch {\
-		 bacon() { print 123; }\
+		 	bacon() { print 123; }\
 		}\
-		Brunch().bacon();";
+		var a = Brunch();\
+		a.bacon();";
 
 	const char* output = "123\n";
 	ScriptResult ret = scriptRun(input);
@@ -70,10 +71,27 @@ void testThis(void)
 {
 	const char* input =
 		"class Person {\
-		 	sayName() { print this.name; }\
+			sayName() { print this.name; }\
 		}\
 		var jane = Person();\
 		jane.name = \"Jane\";\
+		jane.sayName();";
+
+	const char* output = "Jane\n";
+	ScriptResult ret = scriptRun(input);
+	TEST_ASSERT(ret.result == INTERPRET_OK);
+	TEST_ASSERT_EQUAL_STRING(output, ret.output);
+	free(ret.output);
+}
+
+void testInitializer(void)
+{
+	const char* input =
+		"class Person {\
+			init(name) { this.name = name; }\
+ 		 sayName() { print this.name; }\
+		}\
+		var jane = Person(\"Jane\");\
 		jane.sayName();";
 
 	const char* output = "Jane\n";
@@ -94,7 +112,7 @@ void testThisInFunction(void)
 		}\
 		Nested().method();";
 
-	const char* output = "Nested Instance\n";
+	const char* output = "Nested instance\n";
 	ScriptResult ret = scriptRun(input);
 	TEST_ASSERT(ret.result == INTERPRET_OK);
 	TEST_ASSERT_EQUAL_STRING(output, ret.output);
@@ -111,6 +129,7 @@ RUN_TEST(testProperty);
 RUN_TEST(testMethod);
 RUN_TEST(testThis);
 RUN_TEST(testThisInFunction);
+RUN_TEST(testInitializer);
 
 return UNITY_END();
 }
