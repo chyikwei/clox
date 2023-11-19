@@ -24,9 +24,17 @@ static Obj* allocateObject(size_t size, ObjType type) {
 	return object;
 }
 
+ObjBoundMethod* newBoundMethod(Value receiver, ObjClosure* method) {
+	ObjBoundMethod* bound = ALLOCATE_OBJ(ObjBoundMethod, OBJ_BOUND_METHOD);
+	bound->receiver = receiver;
+	bound->method = method;
+	return bound;
+}
+
 ObjClass* newClass(ObjString* name) {
 	ObjClass* klass = ALLOCATE_OBJ(ObjClass, OBJ_CLASS);
 	klass->name = name;
+	initTable(&klass->methods);
 	return klass;
 }
 
@@ -145,6 +153,8 @@ void printObject(Value value, FILE* outstream) {
 		case OBJ_NATIVE:
 			fprintf(outstream, "<native fn>");
 			break;
+		case OBJ_BOUND_METHOD:
+			printFunction(AS_BOUND_METHOD(value)->method->function, outstream);
 		case OBJ_CLOSURE:
 			printFunction(AS_CLOSURE(value)->function, outstream);
 			break;

@@ -51,6 +51,21 @@ void testProperty(void)
 	free(ret.output);
 }
 
+void testMethod(void)
+{
+	const char* input =
+		"class Brunch {\
+		 bacon() { print 123; }\
+		}\
+		Brunch().bacon();";
+
+	const char* output = "123\n";
+	ScriptResult ret = scriptRun(input);
+	TEST_ASSERT(ret.result == INTERPRET_OK);
+	TEST_ASSERT_EQUAL_STRING(output, ret.output);
+	free(ret.output);
+}
+
 int main(void)
 {
 UNITY_BEGIN();
@@ -58,6 +73,7 @@ UNITY_BEGIN();
 RUN_TEST(testPrintClass);
 RUN_TEST(testPrintInstance);
 RUN_TEST(testProperty);
+RUN_TEST(testMethod);
 
 return UNITY_END();
 }
