@@ -135,6 +135,38 @@ void testMethodCallOptimization(void) {
 	TEST_ASSERT_EQUAL_STRING(output, ret.output);
 }
 
+void testMethodInherit(void) {
+	const char* input =
+		"class A {\
+		 	method() { print \"A method\";}\
+		}\
+		class B < A {}\
+		var b = B();\
+		b.method();";
+
+	const char* output = "A method\n";
+	ScriptResult ret = scriptRun(input);
+	TEST_ASSERT(ret.result == INTERPRET_OK);
+	TEST_ASSERT_EQUAL_STRING(output, ret.output);
+}
+
+void testSuper(void) {
+	const char* input =
+		"class A {\
+		 	method() { print \"A method\"; }\
+		}\
+		class B < A {\
+			method() { print \"B method\"; }\
+			test() { super.method(); }\
+		}\
+		class C < B {}\
+		C().test();";
+
+	const char* output = "A method\n";
+	ScriptResult ret = scriptRun(input);
+	TEST_ASSERT(ret.result == INTERPRET_OK);
+	TEST_ASSERT_EQUAL_STRING(output, ret.output);
+}
 int main(void)
 {
 UNITY_BEGIN();
@@ -147,6 +179,8 @@ RUN_TEST(testThis);
 RUN_TEST(testThisInFunction);
 RUN_TEST(testInitializer);
 RUN_TEST(testMethodCallOptimization);
+RUN_TEST(testMethodInherit);
+RUN_TEST(testSuper);
 
 return UNITY_END();
 }
