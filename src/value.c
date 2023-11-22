@@ -28,6 +28,17 @@ void freeValueArray(ValueArray* array) {
 }
 
 void printValue(Value value, FILE* outstream) {
+#ifdef NAN_BOXING
+	if (IS_BOOL(value)) {
+		fprintf(outstream, AS_BOOL(value) ? "true" : "false");
+	} else if (IS_NIL(value)) {
+		fprintf(outstream, "nil");
+	} else if (IS_NUMBER(value)) {
+		fprintf(outstream, "%g", AS_NUMBER(value));
+	} else if (IS_OBJ(value)) {
+		printObject(value, outstream);
+	}
+#else
 	switch (value.type) {
 		case VAL_BOOL:
 			fprintf(outstream, AS_BOOL(value) ? "true" : "false");
@@ -41,9 +52,16 @@ void printValue(Value value, FILE* outstream) {
 			printObject(value, outstream);
 			break;
 	}
+#endif
 }
 
 bool valuesEqual(Value a, Value b) {
+#ifdef NAN_BOXING
+	if (IS_NUMBER(a) && IS_NUMBER(b)) {
+		return AS_NUMBER(a) == AS_NUMBER(b);
+	}
+	return a == b;
+#else
 	if (a.type != b.type) return false;
 
 	switch (a.type) {
@@ -54,5 +72,6 @@ bool valuesEqual(Value a, Value b) {
 		default:
 			return false; // untouchable
 	}
+#endif
 }
 
